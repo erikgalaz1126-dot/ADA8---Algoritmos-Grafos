@@ -1,29 +1,22 @@
-import heapq
+def dijkstra(graph, start):
+    import math
+    num_vertices = len(graph)
+    dist = [math.inf] * num_vertices
+    dist[start] = 0
+    visited = [False] * num_vertices
 
-def dijkstra(grafo, origen):
-    dist = {n: float('inf') for n in grafo}
-    dist[origen] = 0
-    pq = [(0, origen)]
+    for _ in range(num_vertices):
+        min_dist = math.inf
+        u = -1
+        for v in range(num_vertices):
+            if not visited[v] and dist[v] < min_dist:
+                min_dist = dist[v]
+                u = v
 
-    while pq:
-        d, u = heapq.heappop(pq)
-        if d > dist[u]:
-            continue
+        visited[u] = True
 
-        for v, peso in grafo[u]:
-            if dist[u] + peso < dist[v]:
-                dist[v] = dist[u] + peso
-                heapq.heappush(pq, (dist[v], v))
-
+        for v in range(num_vertices):
+            if graph[u][v] != 0 and dist[u] + graph[u][v] < dist[v]:
+                dist[v] = dist[u] + graph[u][v]
     return dist
 
-
-# EJEMPLO
-grafo = {
-    'A': [('B', 4), ('C', 1)],
-    'B': [('D', 1)],
-    'C': [('B', 2), ('D', 5)],
-    'D': []
-}
-
-print("Dijkstra:", dijkstra(grafo, 'A'))
